@@ -1,0 +1,2 @@
+# MTGDailyCard
+MTGDailyCard repo 
