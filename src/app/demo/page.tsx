@@ -6,25 +6,24 @@ import CardDisplay from '@/components/CardDisplay'
 import LoadingCard from '@/components/LoadingCard'
 import ErrorDisplay from '@/components/ErrorDisplay'
 
-export default function Home() {
+export default function Demo() {
   const [card, setCard] = useState<DailyCard | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchDailyCard = async () => {
+  const fetchDemoCard = async () => {
     try {
       setLoading(true)
       setError(null)
       
-      const response = await fetch('/api/daily-card')
+      const response = await fetch('/api/demo-card')
       
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to fetch daily card')
+        throw new Error('Failed to fetch demo card')
       }
       
-      const dailyCard = await response.json()
-      setCard(dailyCard)
+      const demoCard = await response.json()
+      setCard(demoCard)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unexpected error occurred')
     } finally {
@@ -33,7 +32,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    fetchDailyCard()
+    fetchDemoCard()
   }, [])
 
   const today = new Date().toLocaleDateString('en-US', {
@@ -48,7 +47,7 @@ export default function Home() {
       {/* Header */}
       <header className="text-center py-8 px-4">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-white mb-2">
-          🃏 MTGDailyCard
+          🃏 MTGDailyCard Demo
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
           Your daily Magic: The Gathering card • {today}
@@ -62,7 +61,7 @@ export default function Home() {
         {error && (
           <ErrorDisplay 
             message={error} 
-            onRetry={fetchDailyCard}
+            onRetry={fetchDemoCard}
           />
         )}
         
@@ -74,7 +73,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="text-center py-6 text-gray-500 dark:text-gray-400">
         <p className="text-sm">
-          Powered by{' '}
+          Demo page • Powered by{' '}
           <span className="font-semibold">Next.js</span> and{' '}
           <span className="font-semibold">Supabase</span>
         </p>
