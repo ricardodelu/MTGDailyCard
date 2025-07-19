@@ -47,7 +47,7 @@ export default function Demo() {
       {/* Header */}
       <header className="text-center py-8 px-4">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-800 dark:text-white mb-2">
-          🃏 MTGDailyCard Demo
+          MTGDailyCard Demo
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
           Your daily Magic: The Gathering card • {today}
