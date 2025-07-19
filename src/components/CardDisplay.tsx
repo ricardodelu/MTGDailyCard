@@ -2,12 +2,14 @@
 
 import { DailyCard } from '@/types/card'
 import Image from 'next/image'
+import { useState } from 'react'
 
 interface CardDisplayProps {
   card: DailyCard
 }
 
 export default function CardDisplay({ card }: CardDisplayProps) {
+  const [imageError, setImageError] = useState(false)
   const details = card.details_json
 
   return (
@@ -15,7 +17,7 @@ export default function CardDisplay({ card }: CardDisplayProps) {
       <div className="md:flex">
         {/* Card Image */}
         <div className="md:w-1/2 flex-shrink-0">
-          {card.image_url ? (
+          {card.image_url && !imageError ? (
             <div className="relative h-96 md:h-full">
               <Image
                 src={card.image_url}
@@ -23,13 +25,28 @@ export default function CardDisplay({ card }: CardDisplayProps) {
                 fill
                 className="object-contain bg-gray-100 dark:bg-gray-700"
                 priority
+                onError={() => {
+                  console.warn(`Failed to load image for ${card.card_name}: ${card.image_url}`)
+                  setImageError(true)
+                }}
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           ) : (
             <div className="h-96 md:h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-              <span className="text-gray-500 dark:text-gray-400 text-lg">
-                No image available
-              </span>
+              <div className="text-center">
+                <span className="text-gray-500 dark:text-gray-400 text-lg block mb-2">
+                  {imageError ? 'Image failed to load' : 'No image available'}
+                </span>
+                {imageError && card.image_url && (
+                  <button 
+                    onClick={() => setImageError(false)}
+                    className="text-sm text-blue-500 hover:text-blue-700 underline"
+                  >
+                    Retry loading image
+                  </button>
+                )}
+              </div>
             </div>
           )}
         </div>
