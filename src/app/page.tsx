@@ -10,6 +10,7 @@ export default function Home() {
   const [card, setCard] = useState<DailyCard | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [currentDate, setCurrentDate] = useState<string>('')
 
   const fetchDailyCard = async () => {
     try {
@@ -34,14 +35,14 @@ export default function Home() {
 
   useEffect(() => {
     fetchDailyCard()
+    // Set date on client side to avoid hydration mismatch
+    setCurrentDate(new Date().toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }))
   }, [])
-
-  const today = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
@@ -51,7 +52,7 @@ export default function Home() {
           MTGDailyCard
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300">
-          Your daily Magic: The Gathering card • {today}
+          Your daily Magic: The Gathering card • {currentDate || 'Loading...'}
         </p>
       </header>
 
